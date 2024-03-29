@@ -5,7 +5,7 @@ class Artists:
 
     def get_page(self):
         n = 0
-        with ThreadPoolExecutor() as executor:  # max_workers 最大线程数，总线程为三个最大线程的乘积。
+        with ThreadPoolExecutor(max_workers=1) as executor: 
             while True:
                 url = f"{self.url}?o={n}"
                 r = requests.get(url, allow_redirects=False)
@@ -25,7 +25,7 @@ class Page:
             soup = BeautifulSoup(r.text, 'html.parser')
             article = soup.find_all('article', class_='post-card post-card--preview')
             if article:
-                with ThreadPoolExecutor() as executor:  # 最大线程数
+                with ThreadPoolExecutor(max_workers=1) as executor:  
                     total_tasks = len(article)
                     futures = []
 
@@ -65,10 +65,10 @@ class Posts:
                 h1_tag = soup.find('h1', class_='post__title')
                 # title_text = h1_tag.get_text(strip=True)
                 title_text = pathvalidate.sanitize_filename(h1_tag.get_text(strip=True))
-                path = f"{os.path.expanduser('~')}\\Desktop\\download\\{title_text}\\"
+                path = f"{os.path.split(os.path.realpath(__file__))[0]\\Desktop\\download\\{title_text}\\"
                 if not os.path.exists(path):
                     os.makedirs(path)
-                with ThreadPoolExecutor(max_workers=200) as executor:  # 最大线程数
+                with ThreadPoolExecutor(max_workers=20) as executor:  # 最大线程数
 
                     for link in image_links:
                         parsed_url = urlparse(link)
@@ -102,6 +102,6 @@ class Posts:
 
 
 if __name__ == '__main__':
-    p = Artists(input("请输入链接,默认下载在桌面download文件夹内。\n"), "a")
+    p = Artists(input(f"请输入链接,默认下载在{os.path.split(os.path.realpath(__file__))[0]}\\download文件夹内。\n"), "a")
     p.get_page()
     input("按回车关闭")
