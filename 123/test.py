@@ -60,7 +60,7 @@ class Posts:
             url = f"https://kemono.su{self.url}"
             r = requests.get(url)
             if r.status_code == 200:
-                image_links = re.findall(r'href="(https?://c(?!h).*?)"', r.text)
+                image_links = re.findall(r'href="(https?://n(?!h).*?)"', r.text)
                 soup = BeautifulSoup(r.text, 'html.parser')
                 h1_tag = soup.find('h1', class_='post__title')
                 # title_text = h1_tag.get_text(strip=True)
