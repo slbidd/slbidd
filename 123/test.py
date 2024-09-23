@@ -65,7 +65,7 @@ class Posts:
                 h1_tag = soup.find('h1', class_='post__title')
                 # title_text = h1_tag.get_text(strip=True)
                 title_text = pathvalidate.sanitize_filename(h1_tag.get_text(strip=True))
-                path = f"{os.path.dirname(sys.executable)}\\Desktop\\download\\{title_text}\\"
+                path = f"{os.path.dirname(sys.executable)}\\download\\{title_text}\\"
                 if not os.path.exists(path):
                     os.makedirs(path)
                 with ThreadPoolExecutor(max_workers=20) as executor:  # 最大线程数
